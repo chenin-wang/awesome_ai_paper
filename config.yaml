@@ -1,0 +1,22 @@
+# TODO: add papers by configuration file
+base_url: "https://arxiv.paperswithcode.com/api/v0/papers/"
+# repo_name: "ai-arxiv-daily"
+show_authors: True
+show_links: True
+max_results: 10
+
+publish_readme: True
+publish_gitpage: True
+
+# file paths
+json_readme_path: './docs/ai-arxiv-daily.json'
+json_gitpage_path: './docs/ai-arxiv-daily-web.json'
+
+md_readme_path: 'README.md'
+md_gitpage_path: './docs/index.md'
+
+# keywords to search
+keywords:
+    "SFM":
+        filters: ["SFM", "Structure from Motion"]
+
