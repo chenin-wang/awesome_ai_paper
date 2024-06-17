@@ -52,32 +52,10 @@ class Translater:
     # 模型安全:自动应用的安全设置，可由开发者调整。如需了解详情，请参阅安全设置
 
     def translate(self, text: str):
-        retry_count = 0
-        retry_seconds = 1
-        NUM_RETRIES = 3
-        while retry_count < NUM_RETRIES:
-            try:
-                response = self.model.generate_content(
+        response = self.model.generate_content(
                     f"Note output format, here is the abstract to translate:\n{text}"
                 )
-                result = response.text
-                print(result)
-                break
-            except Exception as e:
-                print(f"Received {e} error, retry after {retry_seconds} seconds.")
-                time.sleep(retry_seconds)
-                retry_count += 1
-                # Here exponential backoff is employed to ensure
-                # the account doesn't get rate limited by making
-                # too many requests too quickly. This increases the
-                # time to wait between requests by a factor of 2.
-                retry_seconds *= 2
-            finally:
-                if retry_count == NUM_RETRIES:
-                    print("Could not recover after making " f"{retry_count} attempts.")
-                    result = text
-
-        return result
+        return response.text
 
 
 logging.basicConfig(
@@ -199,7 +177,7 @@ def get_daily_papers(
         if translater:
             print(f"Translating {paper_title}")
             retry_count = 0
-            retry_seconds = 10
+            retry_seconds = 60
             NUM_RETRIES = 3
             while retry_count < NUM_RETRIES:
                 try:
@@ -242,7 +220,7 @@ def get_daily_papers(
             if repo_url is not None:
                 content[
                     paper_key
-                ] = "|**{}**|**{}**|[{}]({})|**[link]({})**|**{}**|\n".format(
+                ] = "|**{}**|**{}**|[{}]({})|**[link]({})**|{}|\n".format(
                     update_time,
                     paper_title,
                     paper_key,
@@ -252,7 +230,7 @@ def get_daily_papers(
                 )
                 content_to_web[
                     paper_key
-                ] = "- {}, **{}**, Paper: [{}]({}), Code: **[{}]({})**,Abstract: **{}**".format(
+                ] = "- {}, **{}**, Paper: [{}]({}), Code: **[{}]({})**,Abstract: {}".format(
                     update_time,
                     paper_title,
                     paper_url,
