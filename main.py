@@ -196,7 +196,7 @@ def get_daily_papers(
                         print(f"translatation failed. paper_abstract:\n {paper_abstract} ")
 
         logging.info(f"Time = {update_time} title = {paper_title}")
-
+        paper_abstract = paper_abstract.rstrip() #删除末尾的指定字符，默认为空白符，包括空格、换行符、回车符、制表符。
         # eg: 2108.09112v1 -> 2108.09112
         ver_pos = paper_id.find("v")
         if ver_pos == -1:
