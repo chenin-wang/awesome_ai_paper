@@ -540,17 +540,14 @@ if __name__ == "__main__":
     # 覆盖从配置文件中读取的关键词，不采用从配置文件读取，而是直接写死
     #  This should be unencoded. Use `au:del_maestro AND ti:checkerboard`, not `au:del_maestro+AND+ti:checkerboard`.
     config["kv"] = {
-        "多模态": 'abs:("Multi-modal Models" OR "Multimodal Model" OR LMMs OR "vision-language model"OR "Vision Language Models" OR VLMs \
-        "Vision-and-Language Pre-training" OR VLP OR "Multimodal Learning" OR "multimodal pretraining" OR MLLM)',
-        "6DOF Object Pose": 'abs:("Object Pose Estimation" OR "object 6D pose estimation")',
-        "nerf": 'abs:("Radiance Fields")',
-        "分类/检测/识别/分割": 'abs:("image classification" OR "object detection" OR "super resolution" OR "Object Tracking")',
-        "模型压缩/优化": 'abs:("Network Architecture Search" OR "Knowledge Distillation" OR "model optimizer")',
-        "OCR": 'abs:("optical character recognition" OR OCR)',
-        "生成模型": 'abs:("diffusion model" OR "text-to-video synthesis" OR T2V OR "generative model")',
-        "LLM": 'abs:("state-of-the-art LLMs" OR "training language models") OR ti:"large language Models"',
-        "Transformer": 'abs:(self-attention OR cross-attention OR "cross attention")',
-        "3DGS": 'abs:("3d gaussian splatting" OR "gaussian splatting")',
+        "多模态": 'abs:("Multi-modal Models" OR "Multimodal Model" OR "vision-language model"OR "Vision Language Models" \
+        "Vision-and-Language Pre-training" OR "Multimodal Learning" OR "multimodal pretraining") AND abs:("performance")',
+        "6DOF Object Pose": 'abs:("Object Pose Estimation" OR "object 6D pose estimation") AND abs:("performance")',
+        "nerf": 'abs:("Radiance Fields" AND "gaussian splatting") AND abs:("performance")',
+        "分类/检测/识别/分割": 'abs:("image classification" OR "object detection" OR "super resolution" OR "Object Tracking") AND abs:("performance")',
+        "生成模型": 'abs:("diffusion model" OR "text-to-video synthesis" OR "generative model")',
+        "LLM": 'abs:("state-of-the-art LLMs" OR "training language models") AND abs:("performance") OR ti:"large language Models"',
+        "Transformer": 'abs:(self-attention OR cross-attention OR "cross attention" OR "Sparse attention") AND abs:("performance") AND ti:("attention" OR transformer)',
         "各类学习方式": 'abs:(Semi-supervised OR unsupervised OR "Continual Learning" OR "Incremental Learning" OR "Contrastive Learning")',
     }
 
