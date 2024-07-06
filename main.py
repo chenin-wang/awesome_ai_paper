@@ -547,7 +547,7 @@ if __name__ == "__main__":
         "分类/检测/识别/分割": 'abs:("image classification" OR "object detection" OR "super resolution" OR "Object Tracking") AND abs:("performance")',
         "生成模型": 'abs:("diffusion model" OR "text-to-video synthesis" OR "generative model")',
         "LLM": 'abs:("state-of-the-art LLMs" OR "training language models") AND abs:("performance") OR ti:"large language Models"',
-        "Transformer": 'abs:(self-attention OR cross-attention OR "cross attention" OR "Sparse attention" OR "attention") AND abs:("transformer") AND ti:("attention" OR transformer)'
+        "Transformer": 'abs:(self-attention OR cross-attention OR "cross attention" OR "Sparse attention" OR "attention") AND abs:("transformer") AND ti:("attention" OR "transformer")'
     }
 
     config = {**config, "update_paper_links": args.update_paper_links}
