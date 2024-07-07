@@ -486,7 +486,7 @@ def demo(translater: Optional[Translater] = None, **config):
             )
             data_collector.append(data)
             data_collector_web.append(data_web)
-            print("\n")
+            print(f"data_collector:{data_collector}\n")
         logging.info(f"GET daily papers end")
 
     # 1. update README.md file
@@ -550,7 +550,7 @@ if __name__ == "__main__":
     #     "Transformer": 'abs:("self-attention" OR "cross-attention" OR "cross attention" OR "Sparse attention" OR "attention") AND abs:("transformer") AND ti:("attention" OR "transformer")'
     # }
     config["kv"] = {
-        "多模态": 'abs:("Multi-modal Models" OR "Multimodal Model" OR "vision-language model"OR "Vision Language Models")'
+        "多模态": 'abs:("Multi-modal Models" OR "Multimodal Model" OR "vision-language model"OR "Vision Language Models") AND abs:("performance")'
 }
     config = {**config, "update_paper_links": args.update_paper_links}
     if args.google_api_key:
