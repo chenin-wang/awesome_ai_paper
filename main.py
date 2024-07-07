@@ -539,19 +539,19 @@ if __name__ == "__main__":
     config = load_config(args.config_path)
     # 覆盖从配置文件中读取的关键词，不采用从配置文件读取，而是直接写死
     #  This should be unencoded. Use `au:del_maestro AND ti:checkerboard`, not `au:del_maestro+AND+ti:checkerboard`.
-    # config["kv"] = {
-    #     "多模态": 'abs:("Multi-modal Models" OR "Multimodal Model" OR "vision-language model"OR "Vision Language Models" \
-    #     "Vision-and-Language Pre-training" OR "Multimodal Learning" OR "multimodal pretraining") AND abs:("performance")',
-    #     "6DOF Object Pose": 'abs:("Object Pose Estimation" OR "object 6D pose estimation") AND abs:("performance")',
-    #     "nerf": 'abs:("Radiance Fields" AND "gaussian splatting") AND abs:("performance")',
-    #     "分类/检测/识别/分割": 'abs:("image classification" OR "object detection" OR "super resolution" OR "Object Tracking") AND abs:("performance")',
-    #     "生成模型": 'abs:("diffusion model" OR "text-to-video synthesis" OR "generative model")',
-    #     "LLM": 'abs:("state-of-the-art LLMs" OR "training language models") AND abs:("performance") OR ti:"large language Models"',
-    #     "Transformer": 'abs:("self-attention" OR "cross-attention" OR "cross attention" OR "Sparse attention" OR "attention") AND abs:("transformer") AND ti:("attention" OR "transformer")'
-    # }
     config["kv"] = {
-        "多模态": 'abs:("Multi-modal Models" OR "Multimodal Model" OR "vision-language model"OR "Vision Language Models") AND abs:("performance")'
-}
+        "多模态": 'abs:("Multi-modal Models" OR "Multimodal Model" OR "vision-language model"OR "Vision Language Models" \
+        "Vision-and-Language Pre-training" OR "Multimodal Learning" OR "multimodal pretraining") AND abs:("performance")',
+        "6DOF Object Pose": 'abs:("Object Pose Estimation" OR "object 6D pose estimation") AND abs:("performance")',
+        "nerf": 'abs:("Radiance Fields" AND "gaussian splatting") AND abs:("performance")',
+        "分类/检测/识别/分割": 'abs:("image classification" OR "object detection" OR "super resolution" OR "Object Tracking") AND abs:("performance")',
+        "生成模型": 'abs:("diffusion model" OR "text-to-video synthesis" OR "generative model")',
+        "LLM": 'abs:("state-of-the-art LLMs" OR "training language models") AND abs:("performance") OR ti:"large language Models"',
+        "Transformer": 'abs:("self-attention" OR "cross-attention" OR "cross attention" OR "Sparse attention" OR "attention") AND abs:("transformer") AND ti:("attention" OR "transformer")'
+    }
+#     config["kv"] = {
+#         "多模态": 'abs:("Multi-modal Models" OR "Multimodal Model" OR "vision-language model"OR "Vision Language Models") AND abs:("performance")'
+# }
     config = {**config, "update_paper_links": args.update_paper_links}
     if args.google_api_key:
         api = args.google_api_key
