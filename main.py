@@ -39,7 +39,7 @@ class Translater:
         )
 
         self.model = genai.GenerativeModel(
-            "gemini-1.5-pro-latest",
+            "gemini-2.0-flash",
             system_instruction=sys_prompt,
             generation_config=genai.GenerationConfig(
                 # max_output_tokens=2000,
