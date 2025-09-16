@@ -542,8 +542,7 @@ if __name__ == "__main__":
     config["kv"] = {
         "多模态": 'abs:("Multi-modal Models" OR "Multimodal Model" OR "vision-language model"OR "Vision Language Models" \
         "Vision-and-Language Pre-training" OR "Multimodal Learning" OR "multimodal pretraining") AND abs:("performance")',
-        "6DOF Object Pose": 'abs:("Object Pose Estimation" OR "object 6D pose estimation") AND abs:("performance")',
-        "nerf": 'abs:("Radiance Fields" AND "gaussian splatting") AND abs:("performance")',
+        "peft": 'abs:("Parameter-Efficient Fine-Tuning") AND abs:("fine tune" AND "peft")',
         "分类/检测/识别/分割": 'abs:("image classification" OR "object detection" OR "super resolution" OR "Object Tracking") AND abs:("performance")',
         "生成模型": 'abs:("diffusion model" OR "text-to-video synthesis" OR "generative model")',
         "LLM": 'abs:("state-of-the-art LLMs" OR "training language models") AND abs:("performance") OR ti:"large language Models"',
