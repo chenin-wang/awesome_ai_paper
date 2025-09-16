@@ -302,7 +302,7 @@ def update_paper_links(filename):
                 logging.info(f"paper_id = {paper_id}, contents = {contents}")
 
                 valid_link = False if "|null|" in contents else True
-                if valid_link:
+                if True:
                     continue
                 try:
                     code_url = base_url + paper_id  # TODO
