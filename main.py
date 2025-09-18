@@ -161,6 +161,7 @@ def get_daily_papers(
             repo_url = get_code_link(paper_id.split("v")[0])
 
         # 构造输出内容
+        paper_abstract = paper_abstract.replace("\n", "")
         if repo_url:
             content[paper_id] = (
                 "|**{}**|[{}]({})|**[link]({})**|{}|\n".format(
