@@ -401,39 +401,30 @@ if __name__ == "__main__":
     config["kv"] = {
         # 原有主题保留
         "多模态": (
-            'abs:("Multi-modal Models" OR "Multimodal Model" OR "vision-language model" '
+            'abs:("Multi-modal Models" OR "Multimodal" OR "vision-language" '
             'OR "Vision Language Models" "Vision-and-Language Pre-training" '
-            'OR "Multimodal Learning" OR "multimodal pretraining") AND abs:("performance")'
+            'OR "Multimodal Learning" OR "multimodal pretraining")'
+            'AND abs:("model")'
         ),
-        "PEFT": 'abs:("Parameter-Efficient Fine-Tuning") AND abs:("fine tune" AND "peft")',
         "生成模型": 'abs:("diffusion model" OR "text-to-video synthesis" OR "generative model")',
-        "大语言模型": (
-            'abs:("state-of-the-art LLMs" OR "training language models") AND abs:("performance") '
-            'OR ti:"large language Models"'
-        ),
         "Transformer": (
             'abs:("self-attention" OR "cross-attention" OR "cross attention" '
             'OR "Sparse attention" OR "attention") AND abs:("transformer") '
-            'AND ti:("attention" OR "transformer")'
-        ),
-        "多模态大模型": (
-            'abs:("multimodal large language model" OR "multimodal foundation model" '
-            'OR "vision-language large model" OR "multi-modal LLM" OR "MLLM") '
-            'AND abs:("alignment" OR "capability" OR "performance")'
         ),
         "大模型PEFT": (
-            'abs:("PEFT" OR "LLM parameter-efficient fine-tuning" '
-            'OR "foundation model LoRA" OR "large language model adapter" OR "LLM adapter") '
-            'AND abs:("efficiency" OR "fine-tuning")'
+            'abs:("PEFT" OR "parameter-efficient fine-tuning" '
+            'OR "foundation model LoRA" OR "large language model adapter" OR "LLM adapter" '
+            'OR "LoRA")'
         ),
         "大模型强化学习": (
-            'abs:("LLM reinforcement learning" OR "large model RLHF" '
+            'abs:("reinforcement learning" OR "RLHF" '
             'OR "foundation model reinforcement learning from human feedback" '
-            'OR "RL for large language models" OR "alignment via RL")'
+            'OR "RLVR" OR "GRPO")'
+            'AND abs:("model")'
         ),
         "大模型持续学习": (
             'abs:("Multimodal Large Language Models" OR  "Large Language Models"'
-            'OR "MLLM" OR "LLM")'
+            'OR "MLLM" OR "LLM" OR "VLM")'
             'AND abs:("continual learning" OR OR "continual pre-training")'
         )
     }
