@@ -64,26 +64,8 @@ arxiv_url = "http://arxiv.org/"
 def load_config(config_file: str) -> dict:
     """加载配置文件"""
 
-    def pretty_filters(**config) -> dict:
-        keywords = dict()
-        EXCAPE = '"'
-        OR = " OR "
-
-        def parse_filters(filters: list):
-            ret = ""
-            for idx, filter in enumerate(filters):
-                ret += EXCAPE + filter + EXCAPE if len(filter.split()) > 1 else filter
-                if idx != len(filters) - 1:
-                    ret += OR
-            return ret
-
-        for k, v in config["keywords"].items():
-            keywords[k] = parse_filters(v["filters"])
-        return keywords
-
     with open(config_file, "r") as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
-        config["kv"] = pretty_filters(**config)
         logging.info(f"config = {config}")
     return config
 
