@@ -87,11 +87,35 @@ def sort_papers(papers):
 
 
 def get_code_link(qword: str) -> str:
-    """从 GitHub 搜索论文相关代码仓库"""
-    params = {"q": qword, "sort": "stars", "order": "desc"}
-    r = requests.get(github_url, params=params)
-    results = r.json()
-    return results["items"][0]["html_url"] if results["total_count"] > 0 else None
+    """从 GitHub 搜索论文相关代码仓库，添加错误处理"""
+    try:
+        params = {"q": qword, "sort": "stars", "order": "desc"}
+        # 添加超时设置，避免无限等待
+        response = requests.get(github_url, params=params, timeout=10)
+        
+        # 检查请求是否成功（状态码200）
+        if response.status_code != 200:
+            logging.warning(f"GitHub API请求失败，状态码: {response.status_code}，查询词: {qword}")
+            return None
+            
+        results = response.json()
+        
+        # 检查是否包含'total_count'字段
+        if "total_count" not in results:
+            logging.warning(f"GitHub API响应格式异常，缺少total_count字段: {results}")
+            return None
+            
+        return results["items"][0]["html_url"] if results["total_count"] > 0 else None
+        
+    except requests.exceptions.Timeout:
+        logging.error(f"GitHub API请求超时，查询词: {qword}")
+        return None
+    except requests.exceptions.RequestException as e:
+        logging.error(f"GitHub API请求异常: {str(e)}，查询词: {qword}")
+        return None
+    except (KeyError, IndexError) as e:
+        logging.error(f"解析GitHub API响应失败: {str(e)}，响应内容: {results}")
+        return None
 
 
 def get_daily_papers(
