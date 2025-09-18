@@ -10,7 +10,6 @@ import requests
 from typing import Optional
 import time
 import google.generativeai as genai
-import requests
 
 
 # https://github.com/google-gemini/cookbook/tree/main
@@ -18,39 +17,32 @@ import requests
 class Translater:
     def __init__(self, api_key: str):
         self.api_key = api_key
-        genai.configure(api_key=self.api_key)  # 填入自己的api_key
+        genai.configure(api_key=self.api_key)  # 填入自己的 API Key
 
         # 查询模型
         for m in genai.list_models():
             print(m.name)
             print(m.supported_generation_methods)
         sys_prompt = (
-            "You are a highly skilled translator specializing in artificial intelligence and computer science. \
-            You pride yourself on incredible accuracy and attention to detail. You always stick to the facts in the sources provided, and never make up new facts.\
-            Your translations are known for their accuracy, clarity, and fluency.\n\
-            Your task is to translate technical academic abstracts from English to Simplified Chinese.\
-            You will receive an English abstract, and you should produce a Chinese translation that adheres to the following:\n\
-            * **Accuracy:** All technical terms and concepts must be translated correctly.\n\
-            * **Clarity:** The translation should be easily understood by someone familiar with AI concepts.\n\
-            * **Fluency:** The translation should read naturally in Chinese.\n\
-            * **Output Format:** The returned text should not be bolded, not be separated into paragraphs, and remove all line breaks to merge into a single paragraph.\n \
-            Do not add your own opinions or interpretations; remain faithful to the original text while optimizing for readability. \
-            "
+            "You are a highly skilled translator specializing in artificial intelligence and computer science. "
+            "You pride yourself on incredible accuracy and attention to detail. You always stick to the facts in the sources provided, and never make up new facts. "
+            "Your translations are known for their accuracy, clarity, and fluency.\n"
+            "Your task is to translate technical academic abstracts from English to Simplified Chinese. "
+            "You will receive an English abstract, and you should produce a Chinese translation that adheres to the following:\n"
+            "* **Accuracy:** All technical terms and concepts must be translated correctly.\n"
+            "* **Clarity:** The translation should be easily understood by someone familiar with AI concepts.\n"
+            "* **Fluency:** The translation should read naturally in Chinese.\n"
+            "* **Output Format:** The returned text should not be bolded, not be separated into paragraphs, and remove all line breaks to merge into a single paragraph.\n"
+            "Do not add your own opinions or interpretations; remain faithful to the original text while optimizing for readability. "
         )
 
         self.model = genai.GenerativeModel(
             "gemini-2.0-flash",
             system_instruction=sys_prompt,
             generation_config=genai.GenerationConfig(
-                # max_output_tokens=2000,
                 temperature=0.8,
             ),
         )
-
-    # models/gemini-pro
-    # 输入令牌限制:30720
-    # 输出令牌限制:2048
-    # 模型安全:自动应用的安全设置，可由开发者调整。如需了解详情，请参阅安全设置
 
     def translate(self, text: str):
         response = self.model.generate_content(
@@ -65,95 +57,67 @@ logging.basicConfig(
     level=logging.INFO,
 )
 
-base_url = "https://arxiv.paperswithcode.com/api/v0/papers/"
 github_url = "https://api.github.com/search/repositories"
 arxiv_url = "http://arxiv.org/"
 
 
 def load_config(config_file: str) -> dict:
-    """
-    config_file: input config file path
-    return: a dict of configuration
-    """
+    """加载配置文件"""
 
-    # make filters pretty
     def pretty_filters(**config) -> dict:
         keywords = dict()
         EXCAPE = '"'
-        QUOTA = ""  # NO-USE
-        OR = " OR "  # TODO
+        OR = " OR "
 
         def parse_filters(filters: list):
             ret = ""
-            for idx in range(0, len(filters)):
-                filter = filters[idx]
-                if len(filter.split()) > 1:
-                    ret += EXCAPE + filter + EXCAPE
-                else:
-                    ret += QUOTA + filter + QUOTA
+            for idx, filter in enumerate(filters):
+                ret += EXCAPE + filter + EXCAPE if len(filter.split()) > 1 else filter
                 if idx != len(filters) - 1:
                     ret += OR
             return ret
 
         for k, v in config["keywords"].items():
-            keywords[k] = parse_filters(v["filters"])  # {NeRF:}
+            keywords[k] = parse_filters(v["filters"])
         return keywords
 
     with open(config_file, "r") as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
         config["kv"] = pretty_filters(**config)
         logging.info(f"config = {config}")
-
     return config
 
 
 def get_authors(authors, first_author=False):
-    output = str()
-    if first_author == False:
-        output = ", ".join(str(author) for author in authors)
-    else:
-        output = authors[0]
-    return output
+    """获取作者名（支持仅取第一作者）"""
+    if first_author:
+        return authors[0] if authors else ""
+    return ", ".join(str(author) for author in authors)
 
 
 def sort_papers(papers):
-    output = dict()
-    keys = list(papers.keys())
-    keys.sort(reverse=True)
+    """按论文 ID 降序排列论文"""
+    output = {}
+    keys = sorted(papers.keys(), reverse=True)
     for key in keys:
         output[key] = papers[key]
     return output
 
 
 def get_code_link(qword: str) -> str:
-    """
-    This short function was auto-generated by ChatGPT.
-    I only renamed some params and added some comments.
-    @param qword: query string, eg. arxiv ids and paper titles
-    @return paper_code in github: string, if not found, return None
-    """
-    # query = f"arxiv:{arxiv_id}"
-    query = f"{qword}"
-    params = {"q": query, "sort": "stars", "order": "desc"}
+    """从 GitHub 搜索论文相关代码仓库"""
+    params = {"q": qword, "sort": "stars", "order": "desc"}
     r = requests.get(github_url, params=params)
     results = r.json()
-    code_link = None
-    if results["total_count"] > 0:
-        code_link = results["items"][0]["html_url"]
-    return code_link
+    return results["items"][0]["html_url"] if results["total_count"] > 0 else None
 
 
 def get_daily_papers(
     topic, query="slam", max_results=2, translater: Optional[Translater] = None
 ):
-    """
-    @param topic: str
-    @param query: str
-    @return paper_with_code: dict
-    """
-    # output
-    content = dict()
-    content_to_web = dict()
+    """获取每日论文（含翻译、代码链接匹配）"""
+    content = {}
+    content_to_web = {}
     print(f"query = {query}")
     search_engine = arxiv.Search(
         query=query, max_results=max_results, sort_by=arxiv.SortCriterion.SubmittedDate
@@ -162,106 +126,67 @@ def get_daily_papers(
     for result in search_engine.results():
         paper_id = result.get_short_id()
         paper_title = result.title
-        paper_url = result.entry_id
-        code_url = base_url + paper_id  # TODO
-        paper_abstract = result.summary.replace("\n", " ")
-        paper_authors = get_authors(result.authors)
-        paper_first_author = get_authors(result.authors, first_author=True)
-        primary_category = result.primary_category
-        publish_time = result.published.date()
+        paper_url = arxiv_url + "abs/" + paper_id.split("v")[0]  # 移除版本号
+        paper_abstract = result.summary.replace("\n", " ").rstrip()
         update_time = result.updated.date()
-        comments = result.comment
 
+        # 翻译摘要（若有翻译器）
         if translater:
             print(f"Translating {paper_title}")
-            retry_count = 0
-            retry_seconds = 60
-            NUM_RETRIES = 3
+            retry_count, retry_seconds, NUM_RETRIES = 0, 60, 3
             while retry_count < NUM_RETRIES:
                 try:
                     paper_abstract = translater.translate(paper_abstract)
                     break
                 except Exception as e:
-                    print(f"Received {e} error, retry after {retry_seconds} seconds.")
+                    print(f"Error: {e}, retry after {retry_seconds}s.")
                     time.sleep(retry_seconds)
                     retry_count += 1
-                    # Here exponential backoff is employed to ensure the account doesn't get rate limited by making
-                    # too many requests too quickly. This increases the time to wait between requests by a factor of 2.
-                    retry_seconds *= 2
+                    retry_seconds *= 2  # 指数退避
                 finally:
                     if retry_count == NUM_RETRIES:
-                        print(
-                            "Could not recover after making " f"{retry_count} attempts."
-                        )
-                        print(f"translatation failed. paper_abstract:\n {paper_abstract} ")
+                        print(f"Translation failed after {NUM_RETRIES} attempts.")
 
         logging.info(f"Time = {update_time} title = {paper_title}")
-        paper_abstract = paper_abstract.rstrip() #删除末尾的指定字符，默认为空白符，包括空格、换行符、回车符、制表符。
-        # eg: 2108.09112v1 -> 2108.09112
-        ver_pos = paper_id.find("v")
-        if ver_pos == -1:
-            paper_key = paper_id
+
+        # 匹配代码链接（先标题、再论文 ID）
+        repo_url = get_code_link(paper_title)
+        if repo_url is None:
+            repo_url = get_code_link(paper_id.split("v")[0])
+
+        # 构造输出内容
+        if repo_url:
+            content[paper_id] = (
+                "|**{}**|[{}]({})|**[link]({})**|{}|\n".format(
+                    update_time, paper_title, paper_url, repo_url, paper_abstract
+                )
+            )
+            content_to_web[paper_id] = (
+                "- {}, Paper: [{}]({}), Code: **[{}]({})**, Abstract: {}\n".format(
+                    update_time, paper_title, paper_url, repo_url, repo_url, paper_abstract
+                )
+            )
         else:
-            paper_key = paper_id[0:ver_pos]
-        paper_url = arxiv_url + "abs/" + paper_key
-
-        try:
-            # source code link
-            r = requests.get(code_url).json()
-            repo_url = None
-            if "official" in r and r["official"]:
-                repo_url = r["official"]["url"]
-            # TODO: not found, two more chances
-            # else:
-            #    repo_url = get_code_link(paper_title)
-            #    if repo_url is None:
-            #        repo_url = get_code_link(paper_key)
-            if repo_url is not None:
-                content[paper_key] = "|**{}**|[{}]({})|**[link]({})**|{}|\n".format(
-                    update_time,
-                    paper_title,
-                    paper_url,
-                    repo_url,
-                    paper_abstract,
-                )
-                content_to_web[paper_key] = (
-                    "- {}, Paper: [{}]({}), Code: **[{}]({})**,Abstract: {}".format(
-                        update_time,
-                        paper_title,
-                        paper_url,
-                        repo_url,
-                        repo_url,
-                        paper_abstract,
-                    )
-                )
-
-            else:
-                content[paper_key] = "|**{}**|[{}]({})|null|{}|\n".format(
+            content[paper_id] = (
+                "|**{}**|[{}]({})|null|{}|\n".format(
                     update_time, paper_title, paper_url, paper_abstract
                 )
-                content_to_web[paper_key] = "- {}, Paper: [{}]({}),{}".format(
+            )
+            content_to_web[paper_id] = (
+                "- {}, Paper: [{}]({}), {}\n".format(
                     update_time, paper_title, paper_url, paper_abstract
                 )
+            )
 
-            # TODO: select useful comments
-            comments = None
-            if comments != None:
-                content_to_web[paper_key] += f", {comments}\n"
-            else:
-                content_to_web[paper_key] += f"\n"
+        # 补充论文备注（若有）
+        if result.comment:
+            content_to_web[paper_id] += f", {result.comment}\n"
 
-        except Exception as e:
-            logging.error(f"exception: {e} with id: {paper_key}")
-
-    data = {topic: content}
-    data_web = {topic: content_to_web}
-    return data, data_web
+    return {topic: content}, {topic: content_to_web}
 
 
 def update_paper_links(filename):
-    """
-    weekly update paper links in json file
-    """
+    """每周更新 JSON 文件中的论文代码链接"""
 
     def parse_arxiv_string(s):
         parts = s.split("|")
@@ -270,85 +195,48 @@ def update_paper_links(filename):
         paper_url = parts[3].strip()
         code = parts[4].strip()
         abstract = parts[5].strip()
-        paper_url = re.sub(r"v\d+", "", paper_url)
         return date, title, paper_url, code, abstract
 
     with open(filename, "r") as f:
-        content = f.read()
-        if not content:
-            m = {}
-        else:
-            m = json.loads(content)
+        json_data = json.loads(f.read() or "{}")
 
-        json_data = m.copy()
-
-        for keywords, v in json_data.items():
-            logging.info(f"keywords = {keywords}")
-            for paper_id, contents in v.items():
-                contents = str(contents)
-
-                (
-                    update_time,
-                    paper_title,
-                    paper_url,
-                    code_url,
-                    abstract,
-                ) = parse_arxiv_string(contents)
-
-                contents = "|{}|{}|{}|{}|{}|\n".format(
-                    update_time, paper_title, paper_url, code_url, abstract
-                )
-                json_data[keywords][paper_id] = str(contents)
-                logging.info(f"paper_id = {paper_id}, contents = {contents}")
-
-                valid_link = False if "|null|" in contents else True
-                if True:
-                    continue
+    for keywords, papers in json_data.items():
+        logging.info(f"Updating links for: {keywords}")
+        for paper_id, content in papers.items():
+            date, title, paper_url, code, abstract = parse_arxiv_string(str(content))
+            # 若代码链接为 null，尝试重新匹配
+            if "|null|" in content:
                 try:
-                    code_url = base_url + paper_id  # TODO
-                    r = requests.get(code_url).json()
-                    repo_url = None
-                    if "official" in r and r["official"]:
-                        repo_url = r["official"]["url"]
-                        if repo_url is not None:
-                            new_cont = contents.replace(
-                                "|null|", f"|**[link]({repo_url})**|"
-                            )
-                            logging.info(f"ID = {paper_id}, contents = {new_cont}")
-                            json_data[keywords][paper_id] = str(new_cont)
-
+                    repo_url = get_code_link(paper_id.split("v")[0])
+                    if repo_url:
+                        new_content = content.replace(
+                            "|null|", f"|**[link]({repo_url})**|"
+                        )
+                        json_data[keywords][paper_id] = new_content
+                        logging.info(f"Updated link for {paper_id}: {repo_url}")
                 except Exception as e:
-                    logging.error(f"exception: {e} with id: {paper_id}")
-        # dump to json file
-        with open(filename, "w") as f:
-            json.dump(json_data, f)
+                    logging.error(f"Error updating {paper_id}: {e}")
+
+    # 写回 JSON 文件
+    with open(filename, "w") as f:
+        json.dump(json_data, f, indent=2)
 
 
 def update_json_file(filename, data_dict):
-    """
-    daily update json file using data_dict
-    """
+    """每日更新 JSON 文件内容"""
     with open(filename, "r") as f:
-        content = f.read()
-        if not content:
-            m = {}
-        else:
-            m = json.loads(content)
+        json_data = json.loads(f.read() or "{}")
 
-    json_data = m.copy()
-
-    # update papers in each keywords
+    # 合并新论文数据
     for data in data_dict:
-        for keyword in data.keys():
-            papers = data[keyword]
-
-            if keyword in json_data.keys():
-                json_data[keyword].update(papers)
+        for topic, papers in data.items():
+            if topic in json_data:
+                json_data[topic].update(papers)
             else:
-                json_data[keyword] = papers
+                json_data[topic] = papers
 
     with open(filename, "w") as f:
-        json.dump(json_data, f)
+        json.dump(json_data, f, indent=2)
 
 
 def json_to_md(
@@ -360,154 +248,113 @@ def json_to_md(
     use_tc=True,
     use_b2t=True,
 ):
-    """
-    @param filename: str
-    @param md_filename: str
-    @return None
-    """
+    """将 JSON 论文数据转为 Markdown"""
 
     def pretty_math(s: str) -> str:
-        ret = ""
+        """美化 Markdown 中的数学公式"""
         match = re.search(r"\$.*\$", s)
-        if match == None:
+        if not match:
             return s
         math_start, math_end = match.span()
-        space_trail = space_leading = ""
-        if s[:math_start][-1] != " " and "*" != s[:math_start][-1]:
-            space_trail = " "
-        if s[math_end:][0] != " " and "*" != s[math_end:][0]:
-            space_leading = " "
-        ret += s[:math_start]
-        ret += f"{space_trail}${match.group()[1:-1].strip()}${space_leading}"
-        ret += s[math_end:]
-        return ret
+        space_trail = " " if s[:math_start][-1] not in (" ", "*") else ""
+        space_leading = " " if s[math_end:][0] not in (" ", "*") else ""
+        return (
+            s[:math_start]
+            + f"{space_trail}${match.group()[1:-1].strip()}${space_leading}"
+            + s[math_end:]
+        )
 
-    DateNow = datetime.date.today()
-    DateNow = str(DateNow)
-    DateNow = DateNow.replace("-", ".")
+    DateNow = datetime.date.today().strftime("%Y.%m.%d")
 
+    # 读取 JSON 数据
     with open(filename, "r") as f:
-        content = f.read()
-        if not content:
-            data = {}
-        else:
-            data = json.loads(content)
+        data = json.loads(f.read() or "{}")
 
-    # clean README.md if daily already exist else create it
+    # 清空并重新写入 Markdown 文件
     with open(md_filename, "w+") as f:
         pass
 
-    # write data into README.md
     with open(md_filename, "a+") as f:
-        if (use_title == True) and (to_web == True):
-            f.write("---\n" + "layout: default\n" + "---\n\n")
+        # Web 页面头部（若需要）
+        if use_title and to_web:
+            f.write("---\nlayout: default\n---\n\n")
 
-        if use_title == True:
-            # f.write(("<p align="center"><h1 align="center"><br><ins>AI-ARXIV-DAILY"
-            #         "</ins><br>Automatically Update AI Papers Daily</h1></p>\n"))
-            f.write("## Updated on " + DateNow + "\n")
-        else:
-            f.write("> Updated on " + DateNow + "\n")
-
-        # TODO: add usage
+        # 日期标题
+        f.write(f"## Updated on {DateNow}\n")
         f.write("> Usage instructions: [here](./docs/README.md#usage)\n\n")
 
-        # Add: table of contents
-        if use_tc == True:
-            f.write("<details>\n")
-            f.write("  <summary>Table of Contents</summary>\n")
-            f.write("  <ol>\n")
-            for keyword in data.keys():
-                day_content = data[keyword]
-                if not day_content:
-                    continue
-                kw = keyword.replace(" ", "-")
-                f.write(f"    <li><a href=#{kw.lower()}>{keyword}</a></li>\n")
-            f.write("  </ol>\n")
-            f.write("</details>\n\n")
+        # 目录（若需要）
+        if use_tc:
+            f.write("<details>\n<summary>Table of Contents</summary>\n<ol>\n")
+            for keyword in data:
+                if data[keyword]:
+                    kw = keyword.replace(" ", "-").lower()
+                    f.write(f"  <li><a href=#{kw}>{keyword}</a></li>\n")
+            f.write("</ol>\n</details>\n\n")
 
-        for keyword in data.keys():
-            day_content = data[keyword]
-            if not day_content:
+        # 按主题生成论文列表
+        for keyword in data:
+            papers = data[keyword]
+            if not papers:
                 continue
-            # the head of each part
             f.write(f"## {keyword}\n\n")
 
-            if use_title == True:
-                if to_web == False:
-                    f.write(
-                        "|Publish Date|Title|Code|Abstract|\n"
-                        + "|---|---|---|--------------------------------------------------|\n"
-                    )
-                else:
-                    f.write("| Publish Date | Title | Code | Abstract |\n")
-                    f.write(
-                        "|:---------|:-----------------------|:------|:-------------------------------------------------|\n"
-                    )
-
-            # sort papers by date
-            day_content = sort_papers(day_content)
-
-            for _, v in day_content.items():
-                if v is not None:
-                    f.write(pretty_math(v))  # make latex pretty
-
-            f.write(f"\n")
-
-            # Add: back to top
-            if use_b2t:
-                top_info = f"#Updated on {DateNow}"
-                top_info = top_info.replace(" ", "-").replace(".", "")
+            # Markdown 表格头
+            if use_title:
                 f.write(
-                    f"<p align=right>(<a href={top_info.lower()}>back to top</a>)</p>\n\n"
+                    "| Publish Date | Title | Code | Abstract |\n"
+                    "|:---------|:-----------------------|:------|:-------------------------------------------------|\n"
                 )
+
+            # 按日期降序排列论文
+            for _, content in sort_papers(papers).items():
+                if content:
+                    f.write(pretty_math(content))  # 美化数学公式
+
+            f.write("\n")
+
+            # 返回顶部链接（若需要）
+            if use_b2t:
+                top_anchor = f"#updated-on-{DateNow.replace('.', '')}"
+                f.write(f'<p align=right>(<a href="{top_anchor}">back to top</a>)</p>\n\n')
 
     logging.info(f"{task} finished")
 
 
 def demo(translater: Optional[Translater] = None, **config):
-    # TODO: use config
-    data_collector = []
-    data_collector_web = []
-
+    """演示逻辑：获取论文、更新文件"""
+    data_collector, data_collector_web = [], []
     keywords = config["kv"]
     max_results = config["max_results"]
     publish_readme = config["publish_readme"]
     publish_gitpage = config["publish_gitpage"]
-
     b_update = config["update_paper_links"]
+
     logging.info(f"Update Paper Link = {b_update}")
-    if config["update_paper_links"] == False:
-        logging.info(f"GET daily papers begin")
-        for topic, keyword in keywords.items():
-            logging.info(f"topic: {topic}, keyword: {keyword}")
+    if not b_update:
+        logging.info("Getting daily papers...")
+        for topic, query in keywords.items():
+            logging.info(f"Topic: {topic}, Query: {query}")
             data, data_web = get_daily_papers(
-                topic, query=keyword, max_results=max_results, translater=translater
+                topic, query=query, max_results=max_results, translater=translater
             )
             data_collector.append(data)
             data_collector_web.append(data_web)
-            print(f"data_collector:{data_collector}\n")
-        logging.info(f"GET daily papers end")
+        logging.info("Daily papers fetched.")
 
-    # 1. update README.md file
+    # 更新 README.md
     if publish_readme:
-        json_file = config["json_readme_path"]
-        md_file = config["md_readme_path"]
-        # update paper links
-        if config["update_paper_links"]:
+        json_file, md_file = config["json_readme_path"], config["md_readme_path"]
+        if b_update:
             update_paper_links(json_file)
         else:
-            # update json data
             update_json_file(json_file, data_collector)
-        # json data to markdown
         json_to_md(json_file, md_file, task="Update Readme")
 
-    # 2. update docs/index.md file (to gitpage)
+    # 更新 GitPage 页面（docs/index.md）
     if publish_gitpage:
-        json_file = config["json_gitpage_path"]
-        md_file = config["md_gitpage_path"]
-        # TODO: duplicated update paper links!!!
-        if config["update_paper_links"]:
+        json_file, md_file = config["json_gitpage_path"], config["md_gitpage_path"]
+        if b_update:
             update_paper_links(json_file)
         else:
             update_json_file(json_file, data_collector)
@@ -524,37 +371,70 @@ def demo(translater: Optional[Translater] = None, **config):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--config_path", type=str, default="config.yaml", help="configuration file path"
+        "--config_path",
+        type=str,
+        default="config.yaml",
+        help="Configuration file path",
     )
     parser.add_argument(
         "--update_paper_links",
-        default=False,
         action="store_true",
-        help="whether to update paper links etc.",
+        help="Whether to update paper links",
     )
     parser.add_argument(
-        "--google_api_key", type=str, default="", help="google ai api key."
+        "--google_api_key",
+        type=str,
+        default="",
+        help="Google Gemini API Key",
     )
     args = parser.parse_args()
+
+    # 加载配置并覆盖关键词（示例：直接写死多领域关键词）
     config = load_config(args.config_path)
-    # 覆盖从配置文件中读取的关键词，不采用从配置文件读取，而是直接写死
-    #  This should be unencoded. Use `au:del_maestro AND ti:checkerboard`, not `au:del_maestro+AND+ti:checkerboard`.
     config["kv"] = {
-        "多模态": 'abs:("Multi-modal Models" OR "Multimodal Model" OR "vision-language model"OR "Vision Language Models" \
-        "Vision-and-Language Pre-training" OR "Multimodal Learning" OR "multimodal pretraining") AND abs:("performance")',
-        "peft": 'abs:("Parameter-Efficient Fine-Tuning") AND abs:("fine tune" AND "peft")',
-        "分类/检测/识别/分割": 'abs:("image classification" OR "object detection" OR "super resolution" OR "Object Tracking") AND abs:("performance")',
+        # 原有主题保留
+        "多模态": (
+            'abs:("Multi-modal Models" OR "Multimodal Model" OR "vision-language model" '
+            'OR "Vision Language Models" "Vision-and-Language Pre-training" '
+            'OR "Multimodal Learning" OR "multimodal pretraining") AND abs:("performance")'
+        ),
+        "PEFT": 'abs:("Parameter-Efficient Fine-Tuning") AND abs:("fine tune" AND "peft")',
         "生成模型": 'abs:("diffusion model" OR "text-to-video synthesis" OR "generative model")',
-        "LLM": 'abs:("state-of-the-art LLMs" OR "training language models") AND abs:("performance") OR ti:"large language Models"',
-        "Transformer": 'abs:("self-attention" OR "cross-attention" OR "cross attention" OR "Sparse attention" OR "attention") AND abs:("transformer") AND ti:("attention" OR "transformer")'
+        "大语言模型": (
+            'abs:("state-of-the-art LLMs" OR "training language models") AND abs:("performance") '
+            'OR ti:"large language Models"'
+        ),
+        "Transformer": (
+            'abs:("self-attention" OR "cross-attention" OR "cross attention" '
+            'OR "Sparse attention" OR "attention") AND abs:("transformer") '
+            'AND ti:("attention" OR "transformer")'
+        ),
+        "多模态大模型": (
+            'abs:("multimodal large language model" OR "multimodal foundation model" '
+            'OR "vision-language large model" OR "multi-modal LLM" OR "MLLM") '
+            'AND abs:("alignment" OR "capability" OR "performance")'
+        ),
+        "大模型PEFT": (
+            'abs:("PEFT" OR "LLM parameter-efficient fine-tuning" '
+            'OR "foundation model LoRA" OR "large language model adapter" OR "LLM adapter") '
+            'AND abs:("efficiency" OR "fine-tuning")'
+        ),
+        "大模型强化学习": (
+            'abs:("LLM reinforcement learning" OR "large model RLHF" '
+            'OR "foundation model reinforcement learning from human feedback" '
+            'OR "RL for large language models" OR "alignment via RL")'
+        ),
+        "大模型持续学习": (
+            'abs:("Multimodal Large Language Models" OR  "Large Language Models"'
+            'OR "MLLM" OR "LLM")'
+            'AND abs:("continual learning" OR OR "continual pre-training")'
+        )
     }
-#     config["kv"] = {
-#         "多模态": 'abs:("Multi-modal Models" OR "Multimodal Model" OR "vision-language model"OR "Vision Language Models") AND abs:("performance")'
-# }
-    config = {**config, "update_paper_links": args.update_paper_links}
+    config["update_paper_links"] = args.update_paper_links
+
+    # 若提供 Google API Key，则初始化翻译器
     if args.google_api_key:
-        api = args.google_api_key
-        translater = Translater(api_key=api)
+        translater = Translater(api_key=args.google_api_key)
         demo(translater, **config)
     else:
         demo(**config)
