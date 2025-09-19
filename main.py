@@ -423,9 +423,9 @@ if __name__ == "__main__":
             'AND abs:("model")'
         ),
         "大模型持续学习": (
-            'abs:("Multimodal Large Language Models" OR  "Large Language Models"'
+            'abs:("Multimodal Large Language Models" OR "Large Language Models"'
             'OR "MLLM" OR "LLM" OR "VLM")'
-            'AND abs:("continual learning" OR OR "continual pre-training")'
+            'AND abs:("continual learning" OR "continual pre-training")'
         )
     }
     config["update_paper_links"] = args.update_paper_links
