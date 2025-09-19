@@ -37,7 +37,7 @@ class Translater:
         )
 
         self.model = genai.GenerativeModel(
-            "gemini-2.5-flash",
+            "gemini-2.5-flash-lite",
             system_instruction=sys_prompt,
             generation_config=genai.GenerationConfig(
                 temperature=0.8,
@@ -160,8 +160,10 @@ def get_daily_papers(
         if repo_url is None:
             repo_url = get_code_link(paper_id.split("v")[0])
 
-        # 构造输出内容
-        paper_abstract = paper_abstract.replace("\n", "")
+        # 2. 处理空摘要（避免表格显示空白）
+        if not paper_abstract.strip():
+            paper_abstract = "No abstract provided."
+        paper_abstract = paper_abstract.replace("\n", "").replace("|", "\\|")
         if repo_url:
             content[paper_id] = (
                 "|**{}**|[{}]({})|**[link]({})**|{}|\n".format(
@@ -396,37 +398,53 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    # 加载配置并覆盖关键词（示例：直接写死多领域关键词）
+    # 加载配置并覆盖关键词
     config = load_config(args.config_path)
     config["kv"] = {
-        # 原有主题保留
         "多模态": (
-            'abs:("Multi-modal Models" OR "Multimodal" OR "vision-language" '
-            'OR "Vision Language Models" "Vision-and-Language Pre-training" '
-            'OR "Multimodal Learning" OR "multimodal pretraining")'
-            'AND abs:("model")'
-        ),
-        "生成模型": 'abs:("diffusion model" OR "text-to-video synthesis" OR "generative model")',
-        "Transformer": (
-            'abs:("self-attention" OR "cross-attention" OR "cross attention" '
-            'OR "Sparse attention" OR "attention") AND abs:("transformer") '
+            'abs:("Multi-modal Models" OR "Multimodal" OR "vision-language model" OR "VLM" '
+            'OR "Vision-Language Models" OR "Vision-and-Language Pre-training" '
+            'OR "Multimodal Learning" OR "multimodal pretraining" OR "multimodal foundation model" '
+            'OR "MLLM" OR "multimodal large language model")'
+            'AND abs:("model" OR "framework" OR "architecture" OR "alignment" OR "capability")'
         ),
         "大模型PEFT": (
-            'abs:("PEFT" OR "parameter-efficient fine-tuning" '
-            'OR "foundation model LoRA" OR "large language model adapter" OR "LLM adapter" '
-            'OR "LoRA")'
+            'abs:("PEFT" OR "parameter-efficient fine-tuning" OR "parameter-efficient adaptation" '
+            'OR "LoRA" OR "adapter layers" OR "LLM adapter" OR "foundation model efficient tuning")'
+            'AND abs:("large language model" OR "LLM" OR "foundation model" '
+            'OR "Vision-Language Models" OR "Vision-and-Language Pre-training" OR "VLM"'
+            'OR "Multimodal Learning" OR "multimodal pretraining" OR "multimodal foundation model" '
+            'OR "MLLM" OR "multimodal large language model" '
+            'OR "multimodal LLM" OR "vision-language model" )'
         ),
         "大模型强化学习": (
-            'abs:("reinforcement learning" OR "RLHF" '
-            'OR "foundation model reinforcement learning from human feedback" '
-            'OR "RLVR" OR "GRPO")'
-            'AND abs:("model")'
+            'abs:("reinforcement learning" OR "RLHF" OR "RLAIF" OR "PPO" OR "GRPO" OR "TRPO" OR "RLVR" '
+            'OR "reinforcement learning from human feedback" OR "reinforcement learning from AI feedback" '
+            'OR "alignment via RL" OR "RL for alignment")'
+            'AND abs:("large language model" OR "LLM" OR "foundation model" '
+            'OR "Vision-Language Models" OR "Vision-and-Language Pre-training" OR "VLM"'
+            'OR "Multimodal Learning" OR "multimodal pretraining" OR "multimodal foundation model" '
+            'OR "MLLM" OR "multimodal large language model" '
+            'OR "multimodal LLM" OR "vision-language model" )'
         ),
         "大模型持续学习": (
-            'abs:("Multimodal Large Language Models" OR "Large Language Models"'
-            'OR "MLLM" OR "LLM" OR "VLM")'
-            'AND abs:("continual learning" OR "continual pre-training")'
-        )
+            'abs:("continual learning" OR "lifelong learning" OR "incremental learning" '
+            'OR "continual pre-training" OR "online learning" OR "catastrophic forgetting" '
+            'OR "memory replay" OR "knowledge retention") '
+            'AND abs:("LLM" OR "large language model" OR "MLLM" OR "VLM" OR "foundation model" '
+            'OR "multimodal model" OR "vision-language model")'
+        ),
+        "Transformer": (
+            'abs:("self-attention" OR "cross-attention" OR "sparse attention" OR "local attention" '
+            'OR "attention mechanism" OR "multi-head attention") '
+            'AND abs:("transformer" OR "transformer variant" OR "modified transformer" OR "transformer architecture")'
+        ),
+        "生成模型": (
+            'abs:("diffusion model" OR "GAN" OR "generative adversarial network" '
+            'OR "autoregressive model" OR "flow-based model" OR "VAE" OR "variational autoencoder" '
+            'OR "text-to-image" OR "text-to-video synthesis" OR "text-to-3D" OR "image generation" '
+            'OR "video generation" OR "generative model" OR "generative foundation model")'
+        ),
     }
     config["update_paper_links"] = args.update_paper_links
 
