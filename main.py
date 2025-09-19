@@ -37,7 +37,7 @@ class Translater:
         )
 
         self.model = genai.GenerativeModel(
-            "gemini-2.5-flash-lite",
+            "gemini-2.5-flash",
             system_instruction=sys_prompt,
             generation_config=genai.GenerationConfig(
                 temperature=0.8,
