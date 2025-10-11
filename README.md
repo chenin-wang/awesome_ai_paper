@@ -1,4 +1,4 @@
-## Updated on 2025.10.10
+## Updated on 2025.10.11
 > Usage instructions: [here](./docs/README.md#usage)
 
 <details>
@@ -118,7 +118,7 @@
 |**2025-09-18**|[From Pixels to Urban Policy-Intelligence: Recovering Legacy Effects of Redlining with a Multimodal LLM](http://arxiv.org/abs/2509.15132)|null|本文展示了多模态大语言模型 (MLLM) 如何拓展城市测量能力并支持基于地点的政策干预措施的跟踪。GPT-4o 利用结构化的“先推理后估计”流程在街景图像上推断出社区贫困和树冠覆盖，我们将其嵌入准实验设计中以评估20世纪30年代“红线政策”的遗留影响。GPT-4o 再现了“红线政策”预期的不利社会环境遗留影响，其估计结果与权威来源统计上无显著差异，并且它优于传统的基于像素的分割基线，这与整体场景推理能够提取超越单纯对象计数的更高阶信息的观点相符。这些结果将 MLLM 定位为政策级别的社区测量工具，并促使在更广泛的政策评估场景中进行验证。|
 |**2025-09-18**|[Forecasting and Visualizing Air Quality from Sky Images with Vision-Language Models](http://arxiv.org/abs/2509.15076)|null|空气污染仍然是对公众健康和环境可持续性的严峻威胁，然而传统监测系统常受限于有限的空间覆盖范围和可及性。本文提出了一种人工智能驱动的智能体，该智能体基于天空图像预测环境空气污染水平，并利用生成建模合成逼真的污染情景可视化效果。我们的方法结合了统计纹理分析与监督学习进行污染分类，并利用视觉-语言模型（VLM）引导的图像生成来生成空气质量状况的可解释表示。生成的视觉效果模拟了不同程度的污染，为用户界面提供了基础，以提高透明度并支持明智的环境决策。这些输出可以无缝集成到智能应用中，旨在增强态势感知并鼓励基于实时预测的行为响应。我们使用城市天空图像数据集验证了我们的方法，并证明了其在污染水平估计和语义一致的视觉合成方面的有效性。系统设计进一步融入了以人为中心的用户体验原则，以确保空气质量预测的可访问性、清晰度和公众参与。为支持可扩展和节能的部署，未来的迭代将整合一种通过基于FPGA的增量学习进行增强的绿色CNN架构，从而实现边缘平台上的实时推理。|
 
-<p align=right>(<a href="#updated-on-20251010">back to top</a>)</p>
+<p align=right>(<a href="#updated-on-20251011">back to top</a>)</p>
 
 ## 大模型PEFT
 
@@ -201,7 +201,7 @@
 |**2025-09-18**|[Exploring Data and Parameter Efficient Strategies for Arabic Dialect Identifications](http://arxiv.org/abs/2509.13775)|null|本文探讨了我们对阿拉伯方言识别 (ADI) 中不同数据高效和参数高效方法的探索。具体来说，我们研究了各种软提示策略，包括 prefix-tuning、prompt-tuning、P-tuning 和 P-tuning V2，以及 LoRA 重参数化。对于数据高效策略，我们分析了结合零样本和少样本推理的硬提示，以分析大型语言模型 (LLMs) 的方言识别能力。对于参数高效的 PEFT 方法，我们使用阿拉伯语专用的编码器模型在几个主要数据集上进行了实验。我们还在开源的仅解码器模型、一个通用多语言模型 (Phi-3.5) 和一个阿拉伯语专用模型 (SILMA) 上分析了 n-shot 推理。我们观察到，LLMs 在少样本或零样本设置中通常难以区分方言细微差别。软提示编码器变体表现更好，而基于 LoRA 的微调模型表现最佳，甚至超越了完全微调。|
 |**2025-09-17**|[Latent Traits and Cross-Task Transfer: Deconstructing Dataset Interactions in LLM Fine-tuning](http://arxiv.org/abs/2509.13624)|null|大语言模型正越来越多地部署到各种应用中。这通常包括大语言模型在训练期间未曾遇到的任务。这意味着枚举并获取所有任务的高质量训练数据是不可行的。因此，我们通常需要依赖于使用具有不同特征的数据集的迁移学习，并预测分布外请求。受此实际需求的启发，我们提出了一个分析框架，通过构建迁移学习矩阵和降维来剖析这些跨任务交互。我们训练并分析了10个模型，以识别潜在能力（例如，推理、情感分类、自然语言理解、算术）并发现迁移学习的副作用。我们的发现揭示，性能提升往往难以用基于表层数据集相似性或源数据质量的解释来阐明。相反，源数据集的隐藏统计因素，例如类别分布和生成长度倾向性，以及特定的语言特征，实际上更具影响力。这项工作为理解迁移学习的复杂动态提供了见解，为更可预测和更有效的大语言模型适应铺平了道路。|
 
-<p align=right>(<a href="#updated-on-20251010">back to top</a>)</p>
+<p align=right>(<a href="#updated-on-20251011">back to top</a>)</p>
 
 ## 大模型强化学习
 
@@ -308,7 +308,7 @@
 |**2025-09-18**|[LEED: A Highly Efficient and Scalable LLM-Empowered Expert Demonstrations Framework for Multi-Agent Reinforcement Learning](http://arxiv.org/abs/2509.14680)|null|多智能体强化学习（MARL）在复杂环境中的智能决策方面具有巨大的潜力。然而，随着智能体数量的增加，它面临着协调性和可扩展性瓶颈。为了解决这些问题，我们提出了用于多智能体强化学习的基于大型语言模型赋能的专家演示框架（LEED）。LEED由两个组件组成：一个演示生成（DG）模块和一个策略优化（PO）模块。具体而言，DG模块利用大型语言模型生成与环境交互的指令，从而产生高质量的演示。PO模块采用去中心化训练范式，其中每个智能体利用生成的演示来构建专家策略损失，并将其与自身的策略损失相结合。这使得每个智能体能够基于专家知识和个体经验有效地个性化和优化其局部策略。实验结果表明，与最先进的基线相比，LEED在样本效率、时间效率和鲁棒的可扩展性方面表现出卓越的性能。|
 |**2025-09-17**|[Process-Supervised Reinforcement Learning for Interactive Multimodal Tool-Use Agents](http://arxiv.org/abs/2509.14480)|null|有效的交互式工具使用要求智能体掌握工具集成推理（TIR）：这是一个涉及多轮规划和长上下文对话管理的复杂过程。为了训练智能体应对这一动态过程，特别是在多模态场景中，我们引入了一个支持交错语音-文本推演的强化学习（RL）沙盒环境。我们的核心策略，轮次级裁决强化学习（TARL），通过采用大型语言模型（LLM）作为评判者提供轮次级评估，解决了长周期任务中信用分配的挑战。为了增强探索，我们将混合任务训练课程与数学推理问题相结合。这种统一方法使基于文本的 $\tau$ -bench 上的任务通过率比强大的强化学习基线提高了6%以上。关键的是，我们展示了我们的框架适用于为智能体任务微调多模态基础模型。通过在交错语音-文本推演上训练基础多模态LLM，我们赋予其工具使用能力，为更自然、语音驱动的交互式智能体铺平了道路。|
 
-<p align=right>(<a href="#updated-on-20251010">back to top</a>)</p>
+<p align=right>(<a href="#updated-on-20251011">back to top</a>)</p>
 
 ## 大模型持续学习
 
@@ -368,7 +368,7 @@
 |**2025-09-10**|[A Role-Aware Multi-Agent Framework for Financial Education Question Answering with LLMs](http://arxiv.org/abs/2509.09727)|null|问答 (QA) 在金融教育中扮演核心角色，然而现有的大型语言模型 (LLM) 方法往往未能捕捉到解决金融问题所需的细致入微且专业化的推理。金融领域要求多步定量推理、熟悉领域特定术语以及理解现实世界情景。我们提出了一个多智能体框架，该框架利用基于角色的提示 (role-based prompting) 来提高在领域特定问答 (QA) 上的性能。我们的框架包含一个基础生成器 (Base Generator)、一个证据检索器 (Evidence Retriever) 和一个专家评审员智能体 (Expert Reviewer)，它们通过单次迭代 (single-pass iteration) 协同工作以生成一个精炼的答案。我们使用来自在线学习平台 Study.com 的 3,532 个专家设计的金融教育问题对我们的框架进行了评估。我们利用检索增强生成 (RAG) 从 6 本金融教科书中获取上下文证据，并为领域专家评审员设计了提示策略。我们的实验表明，基于批判的精炼 (critique-based refinement) 将答案准确率相较于零样本思维链 (zero-shot Chain-of-Thought) 基线提高了 6.6-8.3%，其中 Gemini-2.0-Flash 取得了最高性能。此外，我们的方法使 GPT-4o-mini 能够达到与经过金融领域微调的 FinGPT-mt_Llama3-8B_LoRA 模型相当的性能。我们的结果展示了一种提升金融问答 (QA) 的成本效益方法，并为多智能体金融大型语言模型 (LLM) 系统的进一步研究提供了见解。|
 |**2025-09-10**|[Ubiquitous Intelligence Via Wireless Network-Driven LLMs Evolution](http://arxiv.org/abs/2509.08400)|null|我们引入泛在智能作为一种范式，其中大语言模型(LLMs)在无线网络驱动的生态系统中演进。与静态模型部署不同，这种方法通过网络和LLMs之间的协同，实现了可扩展和持续的智能提升。无线网络支持系统编排的终身学习，而LLMs则推动了更具适应性和响应性的下一代网络发展。这种协同演进凸显了向自我完善系统的转变，在多样化和资源受限的环境中持续提升能力。|
 
-<p align=right>(<a href="#updated-on-20251010">back to top</a>)</p>
+<p align=right>(<a href="#updated-on-20251011">back to top</a>)</p>
 
 ## Transformer
 
@@ -446,7 +446,7 @@
 |**2025-09-15**|[Dynamic Relational Priming Improves Transformer in Multivariate Time Series](http://arxiv.org/abs/2509.12196)|null|Transformer模型中的标准注意力机制采用静态的token表示，这些表示在每一层的所有成对计算中保持不变。这限制了它们在表示上与每对token交互中潜在的多元关系动态的对齐。虽然它们在关系相对同质的领域表现出色，但标准注意力机制的静态关系学习难以捕捉多元时间序列（MTS）数据中多样化、异构的通道间依赖关系——在单个系统中，不同通道对之间的交互可能受完全不同的物理定律或时间动态支配。为了更好地调整注意力机制以适应此类领域现象，我们提出了带有动态关系预置（prime attention）的注意力机制。与标准注意力机制不同，在标准注意力机制中，每个token在其所有成对交互中都呈现相同的表示，而prime attention通过可学习的调制动态地（或按每次交互）调整每个token，以最好地捕捉每对token独特的关联动态，从而为该特定关系优化每次成对交互。prime attention的这种表示可塑性使得在MTS中有效提取关系特定信息成为可能，同时保持与标准注意力机制相同的渐近计算复杂度。我们的结果表明，prime attention在各项基准测试中始终优于标准注意力机制，实现了高达6.5%的预测准确性提升。此外，我们发现与标准注意力机制相比，prime attention在使用减少高达40%的序列长度时，取得了相当或更优的性能，进一步证明了其卓越的关系建模能力。|
 |**2025-09-14**|[Length-Aware Rotary Position Embedding for Text-Speech Alignment](http://arxiv.org/abs/2509.11084)|null|许多近期文本到语音（TTS）系统基于Transformer架构，并采用交叉注意力机制用于文本-语音对齐。在这些系统中，旋转位置编码（RoPE）常被用于编码文本和语音表示中的位置信息。在这项工作中，我们引入了长度感知RoPE（LARoPE），作为RoPE的一个简单而有效的扩展，能够改善文本-语音对齐。与依赖绝对索引的RoPE不同，LARoPE使用长度归一化索引计算查询（query）和键（key）位置之间的相对距离。实验结果表明，LARoPE持续优于RoPE，提供了更快的损失收敛、更准确的文本-语音对齐和更高的整体TTS质量。此外，LARoPE对发音时长变化表现出更强的鲁棒性，并在长达30秒的扩展语音生成中保持稳定性能，而RoPE则出现显著性能下降。值得注意的是，我们的方法在标准零样本TTS基准测试上，词错误率达到了最先进水平。|
 
-<p align=right>(<a href="#updated-on-20251010">back to top</a>)</p>
+<p align=right>(<a href="#updated-on-20251011">back to top</a>)</p>
 
 ## 生成模型
 
@@ -553,5 +553,5 @@
 |**2025-09-18**|[WorldForge: Unlocking Emergent 3D/4D Generation in Video Diffusion Model via Training-Free Guidance](http://arxiv.org/abs/2509.15130)|null|近期视频扩散模型因其丰富的潜在世界先验知识，在空间智能任务中展现出强大潜力。然而，这种潜力受到其有限的可控性和几何不一致性的阻碍，在它们的强大先验知识与3D/4D任务中的实际应用之间造成了差距。因此，现有方法通常依赖于重新训练或微调，这可能导致预训练知识退化并产生高昂的计算成本。为此，我们提出了WorldForge，一个免训练、推理时框架，由三个紧密耦合的模块组成。步内递归细化在推理过程中引入了一种递归细化机制，该机制在每个去噪步骤中反复优化网络预测，以实现精确的轨迹注入。流门控潜在融合利用光流相似性，在潜在空间中将运动与外观解耦，并选择性地将轨迹引导注入到运动相关通道中。双路径自校正引导比较有引导和无引导的去噪路径，以自适应地纠正由噪声或未对齐的结构信号引起的轨迹漂移。这些组件共同作用，在无需训练的情况下注入细粒度、轨迹对齐的引导，实现了精确的运动控制和逼真的内容生成。在各种基准上进行的大量实验验证了我们方法在真实感、轨迹一致性和视觉保真度方面的优越性。这项工作引入了一种新颖的即插即用范式用于可控视频合成，为利用生成先验知识进行空间智能提供了一个新视角。|
 |**2025-09-18**|[Learning Mechanistic Subtypes of Neurodegeneration with a Physics-Informed Variational Autoencoder Mixture Model](http://arxiv.org/abs/2509.15124)|**[link](https://github.com/sanpinnawala/BrainPhys)**|建模神经退行性疾病的潜在机制需要能够从稀疏、高维神经影像数据中捕捉异质且空间变化的动态的方法。将基于偏微分方程（PDE）的物理知识与机器学习相结合，相较于经典数值方法，提供了增强的可解释性和实用性。然而，当前物理集成机器学习方法仅限于考虑单个PDE，这严重限制了它们在多种机制导致不同组（即亚型）疾病中的应用，并加剧了模型误设定和退化的问题。在本文中，我们提出了一种深度生成模型，用于学习由基于物理的PDEs控制的潜在动态模型混合，超越了假设单一PDE结构的传统方法。我们的方法将反应扩散PDEs集成到变分自编码器（VAE）混合模型框架中，支持从神经影像数据中推断可解释潜在变量（例如扩散系数和反应速率）的亚型。我们在合成基准上评估了我们的方法，并展示了其在从正电子发射断层扫描（PET）数据中揭示阿尔茨海默病进展的机制亚型方面的潜力。|
 
-<p align=right>(<a href="#updated-on-20251010">back to top</a>)</p>
+<p align=right>(<a href="#updated-on-20251011">back to top</a>)</p>
 
