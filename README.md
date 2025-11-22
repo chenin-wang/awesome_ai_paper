@@ -1,4 +1,4 @@
-## Updated on 2025.11.21
+## Updated on 2025.11.22
 > Usage instructions: [here](./docs/README.md#usage)
 
 <details>
@@ -268,7 +268,7 @@
 |**2023-09-18**|[Multimodal Foundation Models: From Specialists to General-Purpose Assistants](http://arxiv.org/abs/2309.10020)|null|本文全面综述了展示视觉和视觉-语言能力的多模态基础模型的分类和演进，重点关注从专用模型向通用助手的转变。研究领域涵盖五个核心主题，分为两大类。(i) 首先，我们综述了成熟的研究领域：为特定目的预训练的多模态基础模型，包括两个主题——用于视觉理解的视觉骨干网络学习方法和文本到图像生成。(ii) 接着，我们介绍了探索性、开放研究领域的最新进展：旨在扮演通用助手角色的多模态基础模型，包括三个主题——受大型语言模型（LLMs）启发的统一视觉模型、多模态LLMs的端到端训练以及将多模态工具与LLMs链式结合。本文的目标受众是计算机视觉和视觉-语言多模态领域的研究人员、研究生和专业人士，他们渴望学习多模态基础模型的基础知识和最新进展。|
 |**2025-01-06**|[VALOR: Vision-Audio-Language Omni-Perception Pretraining Model and Dataset](http://arxiv.org/abs/2304.08345)|null|在这篇论文中，我们提出了一种用于多模态理解和生成的视觉-音频-语言全感知预训练模型（VALOR）。与广泛研究的视觉-语言预训练模型不同，VALOR以端到端的方式联合建模视觉、音频和语言之间的关系。它包含三个独立的编码器用于单一模态表示，以及一个解码器用于多模态条件文本生成。我们设计了两个预训练任务来预训练VALOR模型，包括多模态分组对齐（Multimodal Grouping Alignment, MGA）和多模态分组字幕生成（Multimodal Grouping Captioning, MGC）。MGA将视觉、语言和音频投影到同一个公共空间，同时构建视觉-语言、音频-语言和视听-语言对齐。MGC学习如何在视觉、音频或两者兼有的条件下生成文本标记。为了促进视觉-音频-语言预训练研究，我们构建了一个名为VALOR-1M的大规模高质量三模态数据集，其中包含100万个带有人工标注视听字幕的有声视频。大量实验表明，VALOR能够学习到强大的多模态关联，并能泛化到各种下游任务（例如，检索、字幕生成和问答），支持不同的输入模态（例如，视觉-语言、音频-语言和视听-语言）。VALOR在一系列公共跨模态基准测试中取得了新的最先进性能。代码和数据可在项目页面https://casia-iva-group.github.io/projects/VALOR获取。|
 
-<p align=right>(<a href="#updated-on-20251121">back to top</a>)</p>
+<p align=right>(<a href="#updated-on-20251122">back to top</a>)</p>
 
 ## 大模型PEFT
 
@@ -460,7 +460,7 @@
 |**2024-04-04**|[ArtGPT-4: Towards Artistic-understanding Large Vision-Language Models with Enhanced Adapter](http://arxiv.org/abs/2305.07490)|null|大语言模型（LLMs）的成功启发了多模态学习这一新兴研究领域。然而，将LLMs用于多模态学习面临的一个巨大挑战是预训练LLMs的规模，它们通常拥有数十亿参数。为了应对这一挑战，MiniGPT-4和LLaVA等模型被开发出来，以利用更少参数微调预训练模型。尽管它们表现出有前景的性能，但这些模型在理解艺术图像方面仍存在局限性。为了促进更好的艺术理解，本文提出ArtGPT-4，这是一种开创性的大型视觉-语言模型，专门旨在解决现有模型在艺术理解方面的局限性。ArtGPT-4的关键创新在于其针对艺术图像理解这一复杂挑战的设计，使其区别于其他忽略细节而关注更广泛主题的模型。具体来说，它通过将一些专门的适配器层集成到LLM中来工作，使模型能够更高效、更有效地解析和解释复杂视觉标记，而非像现有方法那样微调整个LLM。ArtGPT-4在效率方面展示了其卓越性能：利用Tesla A100设备，其训练可以在短短2小时内完成，数据集包含约0.52M图像-文本对。此外，ArtGPT-4还在ArtEmis和ArtEmis-v2.0数据集以及本文建立的基准上取得了最先进的性能，在6分制下仅比专业艺术家的描述落后微不足道的0.15分。ArtGPT-4的卓越性能表明它能够以艺术理解呈现图像，并传达它们所激发的情感，媲美人类的解读。代码和预训练模型可在\url{https://github.com/DLYuanGod/ArtGPT-4}获取。|
 |**2023-05-21**|[UniAdapter: Unified Parameter-Efficient Transfer Learning for Cross-modal Modeling](http://arxiv.org/abs/2302.06605)|null|大规模视觉-语言预训练模型已显示出对各种下游任务的良好迁移能力。随着这些基础模型规模和下游任务数量的增长，由于高昂的计算和存储成本，标准的S全量微调范式变得不可持续。本文提出了UniAdapter，它统一了单模态和多模态适配器，以在预训练的视觉-语言模型上实现参数高效的跨模态适应。具体来说，适配器被分配到不同的模态及其交互中，通过部分权重共享减少了可调参数的总数。这种统一的知识共享设计能够实现强大的跨模态表示，使各种下游任务受益，仅需要预训练模型1.0%-2.0%的可调参数。在6个跨模态下游基准（包括视频-文本检索、图像-文本检索、VideoQA和VQA）上进行的广泛实验表明，在大多数情况下，UniAdapter不仅优于最先进的方法，甚至击败了全量微调策略。特别地，在MSRVTT检索任务上，UniAdapter以2.2%的模型参数实现了49.7%的recall@1，领先最新的竞争对手2.0%。代码和模型可在https://github.com/RERV/UniAdapter获取。|
 
-<p align=right>(<a href="#updated-on-20251121">back to top</a>)</p>
+<p align=right>(<a href="#updated-on-20251122">back to top</a>)</p>
 
 ## 大模型强化学习
 
@@ -714,7 +714,7 @@
 |**2024-10-30**|[GenRL: Multimodal-foundation world models for generalization in embodied agents](http://arxiv.org/abs/2406.18043)|null|学习能够解决不同领域多种任务的通用具身智能体是一个长期存在的问题。强化学习（RL）难以扩展，因为它需要为每项任务设计复杂的奖励。相比之下，语言能够以更自然的方式指定任务。当前的基础视觉-语言模型（VLM）由于显著的领域鸿沟，通常需要微调或其他适应性修改才能应用于具身环境中。然而，此类领域多模态数据的匮乏阻碍了具身应用基础模型的开发。在这项工作中，我们通过提出多模态基础世界模型克服了这些问题，该模型能够在无需任何语言标注的情况下，连接和对齐基础VLM的表示与用于RL的生成式世界模型的潜在空间。由此产生的智能体学习框架GenRL允许通过视觉和/或语言提示指定任务，将它们根植于具身领域的动态中，并在想象中学习相应的行为。通过在运动和操作领域进行的大型多任务基准测试评估，GenRL实现了基于语言和视觉提示的多任务泛化。此外，通过引入一种无数据策略学习策略，我们的方法为使用生成式世界模型进行基础策略学习奠定了基础。网站、代码和数据：https://mazpie.github.io/genrl/|
 |**2024-09-03**|[RLAIF vs. RLHF: Scaling Reinforcement Learning from Human Feedback with AI Feedback](http://arxiv.org/abs/2309.00267)|null|基于人类反馈的强化学习 (RLHF) 已被证明能有效使大型语言模型 (LLMs) 与人类偏好对齐，但收集高质量的偏好标签成本高昂。由Bai等人提出的基于AI反馈的强化学习 (RLAIF) 提供了一种有前景的替代方案，它使用现成的LLM生成的偏好来训练奖励模型 (RM)。在摘要、有益对话生成和无害对话生成等任务上，我们表明RLAIF实现了与RLHF相当的性能。此外，我们通过证明RLAIF即使在AI标注器与策略模型大小相同，甚至与初始策略模型是完全相同的检查点时，也能优于监督微调基线，从而向“自我提升”迈进了一步。最后，我们引入了直接RLAIF (d-RLAIF)，这是一种通过在强化学习过程中直接从现成的LLM获取奖励来规避奖励模型训练的技术，它实现了优于传统RLAIF的性能。我们的结果表明，RLAIF能够实现与使用人类反馈相当的性能，为RLHF的可扩展性限制提供了一个潜在的解决方案。|
 
-<p align=right>(<a href="#updated-on-20251121">back to top</a>)</p>
+<p align=right>(<a href="#updated-on-20251122">back to top</a>)</p>
 
 ## 大模型持续学习
 
@@ -862,7 +862,7 @@
 |**2024-03-18**|[CoLeCLIP: Open-Domain Continual Learning via Joint Task Prompt and Vocabulary Learning](http://arxiv.org/abs/2403.10245)|**[link](https://github.com/YukunLi99/CoLeCLIP)**|本文探讨了开放域中视觉-语言模型（VLM）的持续学习（CL）问题，其中模型需要对来自包含新类别、不同已知和未知域的数据流进行持续更新和推理。这种能力对于开放环境中的多种应用至关重要，例如AI助手、自动驾驶系统和机器人技术。当前CL研究大多关注具有已知类别的单一域中的闭集场景。像CLIP这样的大型预训练VLM已展示出卓越的零样本识别能力，并且最近的一些研究利用这种能力来缓解CL中的灾难性遗忘，但它们关注的是单一域数据集上的闭集CL。大型VLM的开放域CL挑战性显著更大，原因在于1) 数据集之间存在较大的类别相关性和域差距，以及2) 除了从新适应的数据集中学到的知识外，预训练VLM中零样本知识的遗忘。在这项工作中，我们引入了一种新颖方法，命名为CoLeCLIP，它学习一个基于CLIP的开放域CL模型。它通过联合学习一组任务提示和跨域类别词汇来解决这些挑战。在11个域数据集上的广泛实验表明，CoLeCLIP在任务增量和类别增量学习设置下均优于开放域CL的最先进方法。|
 |**2023-12-05**|[Investigating the Catastrophic Forgetting in Multimodal Large Language Models](http://arxiv.org/abs/2309.10313)|null|继GPT4成功之后，多模态大型语言模型（MLLM）研究的兴趣激增。这类研究侧重于通过微调预训练的大型语言模型（LLM）和视觉模型来开发通用型LLM。然而，灾难性遗忘——一种臭名昭著的现象，即微调后的模型未能保持与预训练模型相似的性能——仍然是多模态大型语言模型（MLLM）中固有的问题。在本文中，我们引入了EMT（Evaluating MulTimodality）来评估MLLM中的灾难性遗忘，方法是将每个MLLM视为一个图像分类器。我们首先应用EMT评估了几个开源的微调MLLM，发现几乎所有被评估的MLLM在标准图像分类任务上都未能保持与其视觉编码器相同的性能水平。此外，我们对一个MLLM LLaVA进行持续微调，并利用EMT在整个微调过程中评估其性能。有趣的是，我们的结果表明，在图像数据集上进行早期阶段的微调，通过增强文本和视觉特征的对齐，可以提高在其他图像数据集上的性能。然而，随着微调的进行，MLLM开始出现幻觉，导致泛化能力显著下降，即使图像编码器保持冻结状态也是如此。我们的结果表明，MLLM在标准图像分类任务上尚未展现出与其视觉模型相当的性能，并且当前的MLLM微调程序仍有改进空间。|
 
-<p align=right>(<a href="#updated-on-20251121">back to top</a>)</p>
+<p align=right>(<a href="#updated-on-20251122">back to top</a>)</p>
 
 ## Transformer
 
@@ -1044,7 +1044,7 @@
 |**2021-09-13**|[Voxel Transformer for 3D Object Detection](http://arxiv.org/abs/2109.02497)|null|我们提出Voxel Transformer (VoTr)，一种新颖且有效的基于体素的Transformer骨干网络，用于点云3D目标检测。传统的基于体素的3D检测器中的3D卷积骨干网络由于感受野有限，无法有效捕获大范围上下文信息，而这对于目标识别和定位至关重要。在本文中，我们通过引入一种基于Transformer的架构来解决这个问题，该架构通过自注意力机制实现体素之间的长程关系。鉴于非空体素天然稀疏但数量众多，直接将标准Transformer应用于体素并非易事。为此，我们提出了稀疏体素模块和子流形体素模块，它们能够有效处理空体素和非空体素位置。为了进一步扩大注意力范围，同时保持与卷积对应物相当的计算开销，我们在这两个模块中提出了两种用于多头注意力的注意力机制：局部注意力(Local Attention)和膨胀注意力(Dilated Attention)，并且我们进一步提出了快速体素查询(Fast Voxel Query)以加速多头注意力中的查询过程。VoTr包含一系列稀疏和子流形体素模块，并且可以应用于大多数基于体素的检测器。我们提出的VoTr在KITTI数据集和Waymo Open数据集上显示出相对于卷积基线的持续改进，同时保持了计算效率。|
 |**2019-05-24**|[SCRAM: Spatially Coherent Randomized Attention Maps](http://arxiv.org/abs/1905.10308)|null|注意力机制和非局部均值操作通常是许多最先进深度学习技术的关键组成部分。特别是，基于多头自注意力的Transformer模型最近在自然语言处理和计算机视觉领域取得了巨大成功。然而，计算n像素图像Transformer的原始算法具有O(n^2)复杂度，这对于大规模图像数据而言通常极其缓慢，有时甚至昂贵得令人望而却步。在本文中，我们提出了一种快速随机算法——SCRAM——它仅需要O(n log(n))时间即可生成图像注意力图。如此显著的加速归因于我们观察到真实世界图像上的注意力图通常表现出(1)空间一致性和(2)稀疏结构。SCRAM的核心思想是利用随机对应算法PatchMatch，首先快速确定每个查询最兼容的键（argmax），然后利用这些知识设计非局部均值操作的稀疏近似。使用argmax（众数）动态构建稀疏近似，使我们的算法区别于所有现有的稀疏近似方法，并使其非常高效。此外，SCRAM是一种广泛适用于任何非局部均值层的近似方法，与一些只能近似自注意力的稀疏近似方法形成对比。我们的初步实验结果表明，SCRAM确实有望加速或扩展Transformer中注意力图的计算。|
 
-<p align=right>(<a href="#updated-on-20251121">back to top</a>)</p>
+<p align=right>(<a href="#updated-on-20251122">back to top</a>)</p>
 
 ## 生成模型
 
@@ -1300,5 +1300,5 @@
 |**2023-10-26**|[Control3Diff: Learning Controllable 3D Diffusion Models from Single-view Images](http://arxiv.org/abs/2304.06700)|null|扩散模型最近已成为2D领域生成建模的事实上的方法。然而，将扩散模型扩展到3D领域极具挑战性，因为难以获取用于训练的3D真实数据。另一方面，将隐式3D表示集成到GANs中的3D GANs在仅使用单视角图像数据集进行训练时，展现出卓越的3D感知生成能力。然而，3D GANs未能提供直接的方法来精确控制图像合成。为了解决这些挑战，我们提出了Control3Diff，这是一种结合了扩散模型和3D GANs优势的3D扩散模型，旨在实现针对单视角数据集的多功能、可控的3D感知图像合成。Control3Diff明确地建模了底层的潜在分布（可选择地以外部输入为条件），从而在扩散过程中实现了直接控制。此外，我们的方法是通用的，适用于任何类型的控制输入，这使我们能够使用相同的扩散目标进行训练，而无需任何辅助监督。我们在FFHQ、AFHQ和ShapeNet等标准图像生成基准上验证了Control3Diff的有效性，使用了图像、草图和文本提示等多种条件输入。请查阅项目网站（\url{https://jiataogu.me/control3diff}）以获取视频比较。|
 |**2019-10-29**|[A Prior of a Googol Gaussians: a Tensor Ring Induced Prior for Generative Models](http://arxiv.org/abs/1910.13148)|null|生成模型在文本、图像、视频和音频合成等许多领域生成逼真的对象。大多数流行的模型——生成对抗网络 (GANs) 和变分自编码器 (VAEs)——通常采用标准高斯分布作为先验。先前的工作表明，更丰富的先验分布族可能有助于避免GANs中的模式崩溃问题，并改进VAEs中的证据下界。我们提出了一种新的先验分布族——张量环诱导先验 (TRIP)——它将指数级数量的高斯分布打包到一个参数数量相对较少的高维格点中。我们表明这些先验改进了GANs的Fréchet Inception距离和VAEs的证据下界。我们还在存在缺失条件的条件生成设置中研究了带有TRIP的生成模型。总之，我们为生成模型提出了一种新颖的即插即用框架，该框架可用于任何GAN和VAEs类架构。|
 
-<p align=right>(<a href="#updated-on-20251121">back to top</a>)</p>
+<p align=right>(<a href="#updated-on-20251122">back to top</a>)</p>
 
