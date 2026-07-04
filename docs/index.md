@@ -2,7 +2,7 @@
 layout: default
 ---
 
-## Updated on 2026.06.27
+## Updated on 2026.07.04
 > Usage instructions: [here](./docs/README.md#usage)
 
 ## 多模态
