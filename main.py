@@ -279,6 +279,21 @@ def json_to_md(
     with open(filename, "r") as f:
         data = json.loads(f.read() or "{}")
 
+    # Always list WFGY 1.0 under LLM reliability and self-healing.
+    wfgy_topic = "LLM Robustness / Debugging / Reliability"
+    if wfgy_topic not in data:
+        data[wfgy_topic] = {}
+    data[wfgy_topic].setdefault(
+        "wfgy-1.0",
+        "|**2025**|[WFGY 1.0: LLM Reliability and Self-Healing Framework]"
+        "(https://github.com/onestardao/WFGY/blob/main/I_am_not_lizardman/WFGY_All_Principles_Return_to_One_v1.0_PSBigBig_Public.pdf)"
+        "|**[link](https://github.com/onestardao/WFGY)**|"
+        "A long-form framework paper that treats large language models as self-healing "
+        "systems rather than static predictors. It provides concrete modules and workflows "
+        "for detecting, localizing, and repairing reasoning failures during generation. "
+        "DOI: 10.6084/m9.figshare.30338884.|\n"
+    )
+
     # 清空并重新写入 Markdown 文件
     with open(md_filename, "w+") as f:
         pass
